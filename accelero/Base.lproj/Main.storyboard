@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.17" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="accelero" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkh-LA-4Su">
+                                <rect key="frame" x="29" y="30" width="318" height="99"/>
+                                <color key="backgroundColor" red="0.68753238156984309" green="0.89358504709757447" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="318" id="3kn-2j-c6K"/>
+                                    <constraint firstAttribute="height" constant="99" id="y2j-OQ-mjn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <state key="normal" title="Record 1"/>
+                                <connections>
+                                    <action selector="record1:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cgw-2Z-QKM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87y-1N-BEC">
+                                <rect key="frame" x="29" y="219" width="318" height="101"/>
+                                <color key="backgroundColor" red="0.68753238156984309" green="0.89358504709757447" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="101" id="dTl-mn-mcx"/>
+                                    <constraint firstAttribute="width" constant="318" id="oiV-in-6ol"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <state key="normal" title="Record 2"/>
+                                <connections>
+                                    <action selector="record2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="L5Q-JV-SFj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HDh-qP-WZC">
+                                <rect key="frame" x="29" y="405" width="317.99999999999989" height="81.999999999999886"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.68753238156984309" green="0.89358504709757447" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <state key="normal" title="Record 3"/>
+                                <connections>
+                                    <action selector="record3:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HYn-fd-L7I"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dkh-LA-4Su" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="KW2-b9-L2o"/>
+                            <constraint firstItem="87y-1N-BEC" firstAttribute="top" secondItem="dkh-LA-4Su" secondAttribute="bottom" constant="90" id="MDl-a4-Loa"/>
+                            <constraint firstItem="dkh-LA-4Su" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="13" id="Rf1-Wp-76S"/>
+                            <constraint firstItem="dkh-LA-4Su" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="d3M-Ad-dH3"/>
+                            <constraint firstItem="87y-1N-BEC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="13" id="u9L-5H-xLB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="r1Button" destination="dkh-LA-4Su" id="rHd-8g-6gO"/>
+                        <outlet property="r2Button" destination="87y-1N-BEC" id="ips-7d-bEm"/>
+                        <outlet property="r3Button" destination="HDh-qP-WZC" id="fDq-gw-hKp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="90.404797601199405"/>
+        </scene>
+    </scenes>
+</document>
