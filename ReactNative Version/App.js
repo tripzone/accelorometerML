@@ -5,11 +5,10 @@ import { Accelerometer } from 'expo';
 import Btn from './Btn';
 import axios from "axios";
 
-const DbApiUrl = 'http://ee55e992.ngrok.io'
-const mlUrl = 'http://eb1daf7c.ngrok.io'
+const mlUrl = 'http://4112b505.ngrok.io'
 
 const saveToDB = (body) => {
-  fetch(DbApiUrl , {
+  fetch(mlUrl+'/save' , {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

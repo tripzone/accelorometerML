@@ -46,8 +46,10 @@ function getId(req, res) {
 }
 
 function patch(req, res) {
+
 	// const id = req.params.id;
 	const data = req.body;
+	console.log(data)
 	const firebasePatch$ = Rx.Observable.fromPromise(firebase.patch(data))
 		.catch((x) => { throw {error: 'FIREBASE_PATCH_FAILED', desc: x } })
 

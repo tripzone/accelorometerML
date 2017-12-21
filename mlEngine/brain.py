@@ -7,7 +7,8 @@ from sklearn.externals import joblib
 import requests
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-
+import pyrebase
+from apiconnect import pushtoDB, getDB
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -18,6 +19,13 @@ CORS(app)
 @app.route("/test")
 def home():
    return json.dumps({"success":True}), 200, {"ContentType":"application/json"}
+
+
+@app.route("/save", methods=["PATCH"])
+def storeInDb():
+	if request.method == "PATCH":
+		payload = request.get_json();
+		pushtoDB(payload)
 
 
 @app.route("/predict", methods=["POST"])
@@ -37,7 +45,9 @@ def predict():
 
 @app.route("/train", methods=["GET"])
 def train():
-	r = requests.get('http://localhost:7501').json()
+	# r = requests.get('http://localhost:7501').json()
+	r = getDB()
+
 	df =pd.DataFrame()
 	y=[]
 	for key in r:

@@ -1,8 +1,8 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 47574,
+  "expoServerNgrokUrl": "https://am-26m.kasrazahir.reactnative-version.exp.direct",
+  "packagerNgrokUrl": "https://packager.am-26m.kasrazahir.reactnative-version.exp.direct",
+  "ngrokPid": 47588
 }
