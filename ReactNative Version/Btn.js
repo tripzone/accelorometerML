@@ -12,7 +12,6 @@ export default class Btn extends React.Component {
         onPress={this.props.onPress}
         style={styles.recordButton}
         large
-        icon={{name: 'envira', type: 'font-awesome'}}
         title={this.props.title}/>  
       </View>
 
