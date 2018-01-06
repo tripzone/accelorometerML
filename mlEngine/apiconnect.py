@@ -15,3 +15,7 @@ def pushtoDB(payload):
 
 def getDB():
 	return db.get().val()
+
+def deleteAll():
+	db.set({})
+	return json.dumps({"success": 1})

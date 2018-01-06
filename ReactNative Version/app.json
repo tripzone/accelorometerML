@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "My New Project",
+    "name": "Accelero-eMl",
     "description": "An empty new project",
     "slug": "my-new-project",
     "privacy": "public",
@@ -15,7 +15,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "kasra.accelero-ml",
+    },
+    "android": {
+      "package": "com.yourcompanyzzz.yourappname"
     }
   }
 }

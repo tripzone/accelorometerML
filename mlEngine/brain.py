@@ -8,7 +8,7 @@ import requests
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import pyrebase
-from apiconnect import pushtoDB, getDB
+from apiconnect import pushtoDB, getDB, deleteAll
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -27,6 +27,10 @@ def storeInDb():
 		payload = request.get_json();
 		pushtoDB(payload)
 
+@app.route("/delete", methods=["POST"])
+def deleteDB():
+	if request.method == "POST":
+		return deleteAll()
 
 @app.route("/predict", methods=["POST"])
 def predict():

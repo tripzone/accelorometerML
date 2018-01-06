@@ -12,7 +12,9 @@ export default class Btn extends React.Component {
         onPress={this.props.onPress}
         style={styles.recordButton}
         large
-        title={this.props.title}/>  
+        title={this.props.title}
+        color={this.props.color ? this.props.color : null} />  
+
       </View>
 
     );

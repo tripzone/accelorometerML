@@ -5,7 +5,8 @@ import { Accelerometer } from 'expo';
 import Btn from './Btn';
 import axios from "axios";
 
-const mlUrl = 'http://4112b505.ngrok.io'
+const mlUrl = 'http://35.170.11.37:300'
+// const mlUrl = 'http://e72d4091.ngrok.io'
 
 const saveToDB = (body) => {
   fetch(mlUrl+'/save' , {
@@ -137,6 +138,13 @@ export default class App extends React.Component {
     }
   }
 
+  clearDB = () => {
+      fetch(mlUrl+'/delete' , {
+      method: 'POST',                                                              
+    }).then(response=>console.log(response))
+      .catch(y=>console.log('no good delete call', y))
+  }
+
   trainPress = () => {
         fetch(mlUrl+'/train' , {
         method: 'GET',                                                              
@@ -157,10 +165,11 @@ export default class App extends React.Component {
         <Btn title='Record Two' onPress={() => this.btnPress(2)} />
         <Btn title='Record Three' onPress={() => this.btnPress(3)} />
         <Divider style={{ backgroundColor: 'blue' }} />
-        <Btn title='Predict' onPress={() => this.predictPress()} />
+        <Btn title='Predict' onPress={() => this.predictPress()} color="#E91E63"/>
         <Text>prediction : {this.state.prediction}</Text>
         <Btn title='Train' onPress={() => this.trainPress()} />
-
+        <Text>This will Clear DB</Text>
+        <Btn title='Delete' onPress={() => this.clearDB()} />
       </View>
 
     );
