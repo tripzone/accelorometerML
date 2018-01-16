@@ -16,7 +16,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "kasra.accelero-ml",
+      "bundleIdentifier": "kasra.accelero-ml"
     },
     "android": {
       "package": "com.yourcompanyzzz.yourappname"
