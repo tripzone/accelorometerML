@@ -1,0 +1,23 @@
+{
+  "name": "accelorometerml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "husky": "^0.14.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "cd ./ReactNativeVersion/ && npm run precommit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasrazahir/accelorometerML.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kasrazahir/accelorometerML/issues"
+  },
+  "homepage": "https://github.com/kasrazahir/accelorometerML#readme"
+}
