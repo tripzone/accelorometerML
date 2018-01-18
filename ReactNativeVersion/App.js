@@ -24,10 +24,7 @@ export default class App extends React.Component {
 
   _toggleSubscription = prediction => {
     if (this.state.isRecording) this._unsubscribe();
-    else {
-      this.data = new Data();
-      this._subscribe(prediction);
-    }
+    else this._subscribe(prediction);
   };
 
   _setUpdateInterval = interval => {
@@ -36,15 +33,9 @@ export default class App extends React.Component {
   };
 
   _requestSlowUpdates = () => this.setUpdateInterval(1000);
-
-  // Request updates every 16ms, which is approximately equal to every frame at 60 frames per second
   _requestFastUpdates = () => this._setUpdateInterval(16);
 
   _subscribe = prediction => {
-    console.info('Subscribed to Accelerometer & Gyroscope updates');
-    /** Subscribe to events and update the component state with the new data from the Accelerometer.
-     * We save the subscription object away so that we can remove it when the component is unmounted.
-     */
     this.setState({ isRecording: true });
     this.data = new Data();
     this.data.setPrediction(prediction);
