@@ -50,8 +50,7 @@ export default class App extends React.Component {
     this.data.setPrediction(prediction);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
       this.data.addAccelData(data);
-      this.setState({ accel: data });
-      this.setState({ count: this.state.count + 1 });
+      this.setState({ accel: data, count: this.state.count + 1 });
     });
     this.gyroscopeSubscription = Gyroscope.addListener(data => {
       this.data.addGyroData(data);
@@ -68,10 +67,7 @@ export default class App extends React.Component {
   };
 
   handleRecordButtonPress = () => {
-    if (this.state.isRecording) {
-      console.log('isRecording, is saving');
-      this.data.save();
-    }
+    if (this.state.isRecording) this.data.save();
     this._toggleSubscription(this.state.motionType);
   };
 
