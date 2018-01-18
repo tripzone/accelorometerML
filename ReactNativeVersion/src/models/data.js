@@ -1,4 +1,4 @@
-import { saveToDB } from '../utils/db';
+import { save as saveToDB } from '../utils/db';
 
 export class Data {
   constructor() {

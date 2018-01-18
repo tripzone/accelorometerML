@@ -47,6 +47,8 @@ module.exports = {
     camelcase: 0,
     'react/sort-comp': 0,
     'no-return-assign': 0,
+    'jsx-a11y/href-no-hash': 0,
+    'jsx-a11y/img-has-alt': 0,
   },
   settings: {
     'import/resolver': {

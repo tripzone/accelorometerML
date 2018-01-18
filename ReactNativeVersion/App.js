@@ -1,21 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
 import { Accelerometer, Gyroscope } from 'expo';
 
-import Btn from './src/components/Button';
+import { drop as dropDB } from './src/utils/db';
+import Button from './src/components/Button';
 import { Data } from './src/models/data';
 import CurrentMotion from './src/components/CurrentMotion';
+import Input from './src/components/WorkoutInput';
+import Record from './src/components/RecordButton';
 
 export default class App extends React.Component {
   data = new Data();
-  state = { gyro: {}, accel: {}, count: 0 };
+  state = {
+    gyro: {},
+    accel: {},
+    count: 0,
+    motionType: 'Motion 1',
+    isRecording: false,
+  };
   componentWillUnmount() {
     this._unsubscribe();
   }
 
   _toggleSubscription = prediction => {
-    if (this.isRecording) this._unsubscribe();
+    if (this.state.isRecording) this._unsubscribe();
     else {
       this.data = new Data();
       this._subscribe(prediction);
@@ -37,7 +45,7 @@ export default class App extends React.Component {
     /** Subscribe to events and update the component state with the new data from the Accelerometer.
      * We save the subscription object away so that we can remove it when the component is unmounted.
      */
-    this.isRecording = true;
+    this.setState({ isRecording: true });
     this.data = new Data();
     this.data.setPrediction(prediction);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
@@ -56,82 +64,44 @@ export default class App extends React.Component {
     this.accelerometerSubscription = null;
     if (this.gyroscopeSubscription) this.gyroscopeSubscription.remove();
     this.gyroscopeSubscription = null;
-    this.isRecording = false;
+    this.setState({ isRecording: false });
   };
 
-  handleRecordButtonPress = prediction => {
-    this._toggleSubscription(prediction);
-    if (!this.isRecording) this.data.save();
+  handleRecordButtonPress = () => {
+    if (this.state.isRecording) {
+      console.log('isRecording, is saving');
+      this.data.save();
+    }
+    this._toggleSubscription(this.state.motionType);
   };
-
-  // predictPress = () => {
-  //   const recording = this.accelerometerSubscription ? true : false;
-  //   this._toggle();
-  //   if (recording) {
-  //     data = {};
-  //     data.x = this.accelerationHist;
-  //     // fetch(mlUrl+'/predict' , {
-  //     //   headers: {
-  //     //     'Accept': 'application/json',
-  //     //     'Content-Type': 'application/json'
-  //     //   },
-  //     //   method: 'POST',
-  //     //   body: JSON.stringify( data )
-  //     // }).then(response=>console.log(response.json()))
-  //     //   .catch(y=>console.log('no good db call', y))
-
-  //     axios
-  //       .post(mlUrl + '/predict', data)
-  //       .then(response => {
-  //         result = response.data['result'];
-  //         this.setState({
-  //           prediction: result
-  //         });
-  //       })
-  //       .catch(error => console.log('NO GOOD', error));
-  //   }
-  // };
 
   render() {
-    const {
-      accel: { x: ax, y: ay, z: az },
-      gyro: { x: gx, y: gy, z: gz },
-      count,
-    } = this.state;
+    const { accel, gyro, count, isRecording } = this.state;
 
     return (
       <View style={styles.container}>
-        <CurrentMotion
-          ax={ax}
-          ay={ay}
-          az={az}
-          gx={gx}
-          gy={gy}
-          gz={gz}
-          count={count}
+        <Input
+          value={this.state.motionType}
+          onChange={motionType => this.setState({ motionType })}
         />
-        <Btn
-          title="Record One"
-          onPress={() => this.handleRecordButtonPress(1)}
+        <Record
+          style={styles.button}
+          isRecording={isRecording}
+          onPress={this.handleRecordButtonPress}
         />
-        <Btn
-          title="Record Two"
-          onPress={() => this.handleRecordButtonPress(2)}
-        />
-        <Btn
-          title="Record Three"
-          onPress={() => this.handleRecordButtonPress(3)}
-        />
-        <Divider style={{ backgroundColor: 'blue' }} />
-        <Btn
-          title="Predict"
+
+        <Button
+          title="🔮 Predict"
           onPress={() => this.predictPress()}
-          color="#E91E63"
+          style={styles.button}
         />
-        <Text>prediction : {0}</Text>
-        <Btn title="Train" onPress={() => this.trainPress()} />
-        <Text>This will Clear DB</Text>
-        <Btn title="Delete" onPress={() => this.clearDB()} />
+        <Button
+          title="📖 Train"
+          onPress={this.trainPress}
+          style={styles.button}
+        />
+        <Button title="💣 Drop DB" onPress={dropDB} style={styles.button} />
+        <CurrentMotion accel={accel} gyro={gyro} count={count} />
       </View>
     );
   }
@@ -143,9 +113,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  recordButton: {
-    margin: 10,
-    width: 500,
+    padding: 5,
   },
 });

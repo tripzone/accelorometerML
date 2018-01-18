@@ -2,7 +2,7 @@ import * as firebase from 'firebase';
 
 const initializeFirebase = () => {
   const config = {
-    apiKey: process.env.APIKEY,
+    apiKey: 'AIzaSyDL8g0u9reKJnR1nj96Z9-4HkIIXYhMt4I',
     authDomain: 'motionpredict.firebaseapp.com',
     databaseURL: 'https://motionpredict.firebaseio.com',
     projectId: 'motionpredict',
@@ -10,13 +10,18 @@ const initializeFirebase = () => {
     messagingSenderId: '814888515758',
   };
   firebase.initializeApp(config);
-  return firebase
-    .database()
-    .ref('data')
-    .push().set;
+  const database = firebase.database().ref('data');
+  return {
+    save: data => database.push().set(data),
+    drop: () => {
+      database.remove();
+    },
+  };
 };
 
-export const saveToDB = initializeFirebase();
+const fb = initializeFirebase();
+
+export const { save, drop } = fb;
 
 const mlUrl = 'http://35.170.11.37:300';
 

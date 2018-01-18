@@ -3,16 +3,19 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { round } from '../utils/math';
 
-const CurrentMotion = ({ ax, ay, az, gx, gy, gz }) => (
+const CurrentMotion = ({
+  accel: { x: ax, y: ay, z: az },
+  gyro: { x: gx, y: gy, z: gz },
+}) => (
   <View style={styles.container}>
+    <Text style={styles.heading}>Gyroscope:</Text>
     <View style={styles.motionRow}>
-      <Text style={styles.heading}>Gyroscope:</Text>
       <Text style={styles.number}>{round(gx)}</Text>
       <Text style={styles.number}>{round(gy)}</Text>
       <Text style={styles.number}>{round(gz)}</Text>
     </View>
+    <Text style={styles.heading}>Accelerometer:</Text>
     <View style={styles.motionRow}>
-      <Text style={styles.heading}>Accelerometer:</Text>
       <Text style={styles.number}>{round(ax)}</Text>
       <Text style={styles.number}>{round(ay)}</Text>
       <Text style={styles.number}>{round(az)}</Text>
@@ -22,10 +25,12 @@ const CurrentMotion = ({ ax, ay, az, gx, gy, gz }) => (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 50,
+    marginBottom: 50,
   },
   motionRow: {
     flexDirection: 'row',
@@ -38,7 +43,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontWeight: 'bold',
-    flex: 1,
+    fontSize: 17,
   },
 });
 
