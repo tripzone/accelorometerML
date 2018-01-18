@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Accelero-eMl",
-    "description": "An empty new project",
-    "slug": "my-new-project",
+    "name": "MotionML",
+    "description": "MotionML",
+    "slug": "MotionML",
     "privacy": "public",
     "sdkVersion": "23.0.0",
     "version": "1.0.0",
