@@ -1,4 +1,5 @@
 import * as firebase from 'firebase';
+import axios from 'axios';
 
 const initializeFirebase = () => {
   const config = {
@@ -23,19 +24,27 @@ const fb = initializeFirebase();
 
 export const { save, drop } = fb;
 
-const mlUrl = 'http://35.170.11.37:300';
+// const mlUrl = 'http://35.170.11.37:300';
+const mlUrl = 'http://192.168.7.238:600';
 
-export const clearDb = () => {
-  fetch(`${mlUrl} + /delete`, {
-    method: 'POST',
-  })
-    .then(response => console.info(response))
-    .catch(y => console.error('no good delete call', y));
-};
-export const getTraining = () => {
+export const trainModel2 = () => {
   fetch(`${mlUrl} + /train`, {
     method: 'GET',
   })
     .then(response => console.info(response))
     .catch(y => console.error('no good db call', y));
+};
+
+export const trainModel = () => {
+  axios
+    .get(`${mlUrl}/train`)
+    .then(console.log)
+    .catch(console.error);
+};
+
+export const predictModel = data => {
+  axios
+    .post(`${mlUrl}/predict`, data)
+    .then(console.log)
+    .catch(console.error);
 };

@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Accelerometer, Gyroscope } from 'expo';
 
-import { drop as dropDB } from './src/utils/db';
+import { drop as dropDB, trainModel } from './src/utils/db';
 import Button from './src/components/Button';
 import { Data } from './src/models/data';
 import CurrentMotion from './src/components/CurrentMotion';
 import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
+import Predict from './src/components/PredictButton';
 
 export default class App extends React.Component {
   data = new Data();
@@ -17,14 +18,16 @@ export default class App extends React.Component {
     count: 0,
     motionType: 'Motion 1',
     isRecording: false,
+    isPredicting: false,
   };
   componentWillUnmount() {
-    this._unsubscribe();
+    this._unsubscribe('isRecording');
+    this._unsubscribe('isPredicting');
   }
 
-  _toggleSubscription = prediction => {
-    if (this.state.isRecording) this._unsubscribe();
-    else this._subscribe(prediction);
+  _toggleSubscription = (prediction, field) => {
+    if (this.state[field]) this._unsubscribe(field);
+    else this._subscribe(prediction, field);
   };
 
   _setUpdateInterval = interval => {
@@ -35,8 +38,8 @@ export default class App extends React.Component {
   _requestSlowUpdates = () => this.setUpdateInterval(1000);
   _requestFastUpdates = () => this._setUpdateInterval(16);
 
-  _subscribe = prediction => {
-    this.setState({ isRecording: true });
+  _subscribe = (prediction, field) => {
+    this.setState({ [field]: true });
     this.data = new Data();
     this.data.setPrediction(prediction);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
@@ -49,21 +52,27 @@ export default class App extends React.Component {
     });
   };
 
-  _unsubscribe = () => {
+  _unsubscribe = field => {
     if (this.accelerometerSubscription) this.accelerometerSubscription.remove();
     this.accelerometerSubscription = null;
     if (this.gyroscopeSubscription) this.gyroscopeSubscription.remove();
     this.gyroscopeSubscription = null;
-    this.setState({ isRecording: false });
+    this.setState({ [field]: false });
   };
 
   handleRecordButtonPress = () => {
     if (this.state.isRecording) this.data.save();
-    this._toggleSubscription(this.state.motionType);
+    this._toggleSubscription(this.state.motionType, 'isRecording');
+  };
+
+  handlePredictButtonPress = () => {
+    console.log('predict button');
+    if (this.state.isPredicting) this.data.saveForPredict();
+    this._toggleSubscription(this.state.motionType, 'isPredicting');
   };
 
   render() {
-    const { accel, gyro, count, isRecording } = this.state;
+    const { accel, gyro, count, isRecording, isPredicting } = this.state;
 
     return (
       <View style={styles.container}>
@@ -74,19 +83,15 @@ export default class App extends React.Component {
         <Record
           style={styles.button}
           isRecording={isRecording}
-          onPress={this.handleRecordButtonPress}
+          onPress={() => this.handleRecordButtonPress('isRecording')}
+        />
+        <Predict
+          style={styles.button}
+          isPredicting={isPredicting}
+          onPress={() => this.handlePredictButtonPress('isPredicting')}
         />
 
-        <Button
-          title="🔮 Predict"
-          onPress={() => this.predictPress()}
-          style={styles.button}
-        />
-        <Button
-          title="📖 Train"
-          onPress={this.trainPress}
-          style={styles.button}
-        />
+        <Button title="📖 Train" onPress={trainModel} style={styles.button} />
         <Button title="💣 Drop DB" onPress={dropDB} style={styles.button} />
         <CurrentMotion accel={accel} gyro={gyro} count={count} />
       </View>

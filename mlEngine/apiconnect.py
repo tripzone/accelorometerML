@@ -6,7 +6,6 @@ config = json.load(open('./private/config.json'))
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-
 def pushtoDB(payload):
 	payloadKey = list(payload)[0]
 	data = payload[payloadKey] 

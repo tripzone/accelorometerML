@@ -38,11 +38,15 @@ def predict():
 		payload = request.get_json();
 		model = joblib.load("model.pkl") 
 		x = []
-		for sample in payload["x"]:
-		    x.append(sample["x"])
-		    x.append(sample["y"])
-		    x.append(sample["z"])
-		x=x[0:20]
+		datapoints = payload['datapoints']
+		for sample in datapoints:
+			x.append(sample['ax'])
+			x.append(sample['ay'])
+			x.append(sample['az'])
+			x.append(sample['gx'])
+			x.append(sample['gy'])
+			x.append(sample['gz'])
+		x=x[0:120]
 		prediction = model.predict(np.array(x).reshape(1, -1))
 		print(prediction.tolist())
 		return json.dumps({"result": prediction.tolist()[0]}), 200, {"ContentType":"application/json"}
@@ -51,21 +55,24 @@ def predict():
 def train():
 	# r = requests.get('http://localhost:7501').json()
 	r = getDB()
-
+	r = r['data']
 	df =pd.DataFrame()
 	y=[]
 	for key in r:
-	    y.append(r[key]['y'])
-	    x = []
-	    for sample in r[key]['x']:
-	        x.append(sample['x'])
-	        x.append(sample['y'])
-	        x.append(sample['z'])
-	    df=pd.concat([df,pd.DataFrame(x).transpose()])
+		y.append(r[key]['prediction'])
+		x = []
+		for sample in r[key]['datapoints']:
+			x.append(sample['ax'])
+			x.append(sample['ay'])
+			x.append(sample['az'])
+			x.append(sample['gx'])
+			x.append(sample['gy'])
+			x.append(sample['gz'])
+		df=pd.concat([df,pd.DataFrame(x).transpose()])
 
 	df.reset_index(drop=True, inplace=True)   
 	# take only first 20 columns
-	df = df[df.columns[0:20]]
+	df = df[df.columns[0:120]]
 	df.fillna(value=0, inplace=True)
 	rn = RandomForestClassifier()
 	model = rn.fit(df, y)
@@ -88,4 +95,4 @@ def train():
 
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", debug=True, port=6000)
+  app.run(host="0.0.0.0", debug=True, port=600)
