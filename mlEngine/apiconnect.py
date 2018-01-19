@@ -1,7 +1,7 @@
 import json
 import pyrebase
 
-config = json.load(open('./private/config.json'))
+config = json.load(open('./config.json'))
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()

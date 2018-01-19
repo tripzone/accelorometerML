@@ -1,0 +1,7 @@
+{
+  "apiKey": "AIzaSyDL8g0u9reKJnR1nj96Z9-4HkIIXYhMt4I",
+  "authDomain": "motionpredict.firebaseapp.com",
+  "databaseURL": "https://motionpredict.firebaseio.com",
+  "storageBucket": "motionpredict.appspot.co",
+  "serviceAccount": "./private/secret.json"
+}
