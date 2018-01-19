@@ -36,9 +36,9 @@ export class Data {
     this.processedData.prediction = this.prediction;
     saveToDB(this.processedData);
   };
-  saveForPredict = () => {
+  saveForPredict = onChange => {
     console.log('saving predict data');
     this.processData();
-    predictModel(this.processedData);
+    predictModel(this.processedData, onChange);
   };
 }

@@ -24,8 +24,8 @@ const fb = initializeFirebase();
 
 export const { save, drop } = fb;
 
-// const mlUrl = 'http://35.170.11.37:300';
-const mlUrl = 'http://192.168.7.238:600';
+const mlUrl = 'http://35.170.11.37:300';
+// const mlUrl = 'http://192.168.7.238:600';
 
 export const trainModel2 = () => {
   fetch(`${mlUrl} + /train`, {
@@ -42,9 +42,10 @@ export const trainModel = () => {
     .catch(console.error);
 };
 
-export const predictModel = data => {
+export const predictModel = (data, onChange) => {
   axios
     .post(`${mlUrl}/predict`, data)
+    .then(response => onChange(response.data.result))
     .then(console.log)
     .catch(console.error);
 };

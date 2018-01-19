@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Accelerometer, Gyroscope } from 'expo';
 
 import { drop as dropDB, trainModel } from './src/utils/db';
@@ -19,6 +19,7 @@ export default class App extends React.Component {
     motionType: 'Motion 1',
     isRecording: false,
     isPredicting: false,
+    prediction: null,
   };
   componentWillUnmount() {
     this._unsubscribe('isRecording');
@@ -66,9 +67,14 @@ export default class App extends React.Component {
   };
 
   handlePredictButtonPress = () => {
-    console.log('predict button');
-    if (this.state.isPredicting) this.data.saveForPredict();
+    if (this.state.isPredicting)
+      this.data.saveForPredict(this.onPredictionChange);
     this._toggleSubscription(this.state.motionType, 'isPredicting');
+  };
+
+  onPredictionChange = result => {
+    console.log('predictionChagne triggered', result);
+    this.setState({ prediction: result });
   };
 
   render() {
@@ -94,6 +100,7 @@ export default class App extends React.Component {
         <Button title="📖 Train" onPress={trainModel} style={styles.button} />
         <Button title="💣 Drop DB" onPress={dropDB} style={styles.button} />
         <CurrentMotion accel={accel} gyro={gyro} count={count} />
+        <Text>{this.state.prediction}</Text>
       </View>
     );
   }

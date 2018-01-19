@@ -16,6 +16,9 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 CORS(app)
 
+def pad_or_truncate(alist, target_len):
+    return alist[:target_len] + [0]*(target_len - len(alist))
+
 @app.route("/test")
 def home():
    return json.dumps({"success":True}), 200, {"ContentType":"application/json"}
@@ -46,10 +49,12 @@ def predict():
 			x.append(sample['gx'])
 			x.append(sample['gy'])
 			x.append(sample['gz'])
-		x=x[0:120]
+		x = pad_or_truncate(x, 120)
 		prediction = model.predict(np.array(x).reshape(1, -1))
+		predMapped = ymap[(prediction[0]).argmax()]
 		print(prediction.tolist())
-		return json.dumps({"result": prediction.tolist()[0]}), 200, {"ContentType":"application/json"}
+		print('mapped it is ', predMapped, 'used this mapping', ymap)
+		return json.dumps({"result": predMapped}), 200, {"ContentType":"application/json"}
 
 @app.route("/train", methods=["GET"])
 def train():
@@ -70,6 +75,9 @@ def train():
 			x.append(sample['gz'])
 		df=pd.concat([df,pd.DataFrame(x).transpose()])
 
+	y = pd.get_dummies(y)
+	global ymap
+	ymap = y.columns
 	df.reset_index(drop=True, inplace=True)   
 	# take only first 20 columns
 	df = df[df.columns[0:120]]
@@ -95,4 +103,4 @@ def train():
 
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", debug=True, port=600)
+  app.run(host="0.0.0.0", debug=True, port=6000)
