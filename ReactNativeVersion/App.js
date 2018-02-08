@@ -5,6 +5,7 @@ import { Accelerometer, Gyroscope } from 'expo';
 import { drop as dropDB, trainModel } from './src/utils/db';
 import Button from './src/components/Button';
 import { Data } from './src/models/data';
+import * as dataUtils from './src/utils/dataUtils';
 import CurrentMotion from './src/components/CurrentMotion';
 import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
@@ -62,7 +63,8 @@ export default class App extends React.Component {
   };
 
   handleRecordButtonPress = () => {
-    if (this.state.isRecording) this.data.save();
+    if (this.state.isRecording) dataUtils.save(this.data);
+
     this._toggleSubscription(this.state.motionType, 'isRecording');
   };
 
