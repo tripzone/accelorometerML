@@ -11,11 +11,18 @@ const initializeFirebase = () => {
     messagingSenderId: '814888515758',
   };
   firebase.initializeApp(config);
-  const database = firebase.database().ref('data');
   return {
-    save: data => database.push().set(data),
-    drop: () => {
-      database.remove();
+    save: (data, target) =>
+      firebase
+        .database()
+        .ref(target)
+        .push()
+        .set(data),
+    drop: target => {
+      firebase
+        .database()
+        .ref(target)
+        .remove();
     },
   };
 };

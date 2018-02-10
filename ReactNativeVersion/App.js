@@ -10,6 +10,7 @@ import CurrentMotion from './src/components/CurrentMotion';
 import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
 import Predict from './src/components/PredictButton';
+import Picker from './src/components/DataTargetPicker';
 
 export default class App extends React.Component {
   data = new Data();
@@ -22,6 +23,7 @@ export default class App extends React.Component {
     isRecording: false,
     isPredicting: false,
     prediction: null,
+    target: 'test',
   };
   componentWillUnmount() {
     this._unsubscribe('isRecording');
@@ -62,7 +64,7 @@ export default class App extends React.Component {
   };
 
   handleRecordButtonPress = (cancelPressed = false) => {
-    if (!cancelPressed) dataUtils.save(this.data);
+    if (!cancelPressed) dataUtils.save(this.data, this.state.target);
     this._toggleSubscription('isRecording');
   };
 
@@ -111,7 +113,11 @@ export default class App extends React.Component {
         />
 
         <Button title="📖 Train" onPress={trainModel} />
-        <Button title="💣 Drop DB" onPress={dropDB} />
+        <Button title="💣 Drop DB" onPress={() => dropDB(this.state.target)} />
+        <Picker
+          target={this.state.target}
+          setTarget={target => this.setState({ target })}
+        />
         <CurrentMotion accel={accel} gyro={gyro} count={count} />
         <Text>{this.state.prediction}</Text>
       </View>
@@ -123,7 +129,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
   },

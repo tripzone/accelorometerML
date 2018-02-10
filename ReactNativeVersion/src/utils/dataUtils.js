@@ -20,7 +20,7 @@ export const processData = data => ({
   repCount: data.repCount,
 });
 
-export const save = data => saveToDB(processData(data));
+export const save = (data, target) => saveToDB(processData(data), target);
 
 export const saveForPredict = (data, onChange) =>
   predictModel(processData(data), onChange);

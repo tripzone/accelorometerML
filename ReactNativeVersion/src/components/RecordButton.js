@@ -13,7 +13,7 @@ export default ({ onPress, isRecording }) => (
         </View>
       </View>
     ) : (
-      <View style={styles.recordingView}>
+      <View style={styles.defaultView}>
         <Button
           title={'📹 Record'}
           onPress={onPress}
