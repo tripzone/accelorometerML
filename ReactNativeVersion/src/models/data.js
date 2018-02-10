@@ -3,9 +3,14 @@ export class Data {
     this.accelArray = [];
     this.gyroArray = [];
     this.workoutName = null;
+    this.repCount = null;
   }
   setWorkout = workoutName => {
     this.workoutName = workoutName;
+    return this;
+  };
+  setRepCount = repCount => {
+    this.repCount = parseInt(repCount);
     return this;
   };
   addGyroData = gyroData => {

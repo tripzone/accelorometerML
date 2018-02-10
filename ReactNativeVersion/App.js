@@ -28,9 +28,9 @@ export default class App extends React.Component {
     this._unsubscribe('isPredicting');
   }
 
-  _toggleSubscription = (workoutName, field) => {
+  _toggleSubscription = field => {
     if (this.state[field]) this._unsubscribe(field);
-    else this._subscribe(workoutName, field);
+    else this._subscribe(field);
   };
 
   _setUpdateInterval = interval => {
@@ -38,10 +38,11 @@ export default class App extends React.Component {
     Gyroscope.setUpdateInterval(interval);
   };
 
-  _subscribe = (workoutName, field) => {
+  _subscribe = field => {
     this.setState({ [field]: true });
     this.data = new Data();
-    this.data.setWorkout(workoutName);
+    this.data.setWorkout(this.state.motionType);
+    this.data.setRepCount(this.state.repCount);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
       this.data.addAccelData(data);
       this.setState({ accel: data, count: this.state.count + 1 });
@@ -62,13 +63,13 @@ export default class App extends React.Component {
 
   handleRecordButtonPress = (cancelPressed = false) => {
     if (!cancelPressed) dataUtils.save(this.data);
-    this._toggleSubscription(this.state.motionType, 'isRecording');
+    this._toggleSubscription('isRecording');
   };
 
   handlePredictButtonPress = () => {
     if (this.state.isPredicting)
       dataUtils.saveForPredict(this.data, this.onPredictionChange);
-    this._toggleSubscription(this.state.motionType, 'isPredicting');
+    this._toggleSubscription('isPredicting');
   };
 
   onPredictionChange = result => {
