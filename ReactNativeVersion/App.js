@@ -17,6 +17,7 @@ export default class App extends React.Component {
     accel: {},
     count: 0,
     motionType: 'Motion 1',
+    repCount: '4',
     isRecording: false,
     isPredicting: false,
     prediction: null,
@@ -78,14 +79,28 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { accel, gyro, count, isRecording, isPredicting } = this.state;
+    const {
+      accel,
+      gyro,
+      count,
+      isRecording,
+      isPredicting,
+      repCount,
+    } = this.state;
 
     return (
       <View style={styles.container}>
-        <Input
-          value={this.state.motionType}
-          onChange={motionType => this.setState({ motionType })}
-        />
+        <View style={styles.inputBoxes}>
+          <Input
+            value={this.state.motionType}
+            onChange={motionType => this.setState({ motionType })}
+          />
+          <Input
+            type={'numeric'}
+            value={repCount}
+            onChange={repCount => this.setState({ repCount })}
+          />
+        </View>
         <Record
           style={styles.button}
           isRecording={isRecording}
@@ -113,5 +128,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
+  },
+  inputBoxes: {
+    flexDirection: 'row',
   },
 });
