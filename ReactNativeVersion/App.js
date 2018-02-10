@@ -5,6 +5,7 @@ import { Accelerometer, Gyroscope } from 'expo';
 import { drop as dropDB, trainModel } from './src/utils/db';
 import Button from './src/components/Button';
 import { Data } from './src/models/data';
+import * as dataUtils from './src/utils/dataUtils';
 import CurrentMotion from './src/components/CurrentMotion';
 import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
@@ -27,9 +28,9 @@ export default class App extends React.Component {
     this._unsubscribe('isPredicting');
   }
 
-  _toggleSubscription = (prediction, field) => {
+  _toggleSubscription = (workoutName, field) => {
     if (this.state[field]) this._unsubscribe(field);
-    else this._subscribe(prediction, field);
+    else this._subscribe(workoutName, field);
   };
 
   _setUpdateInterval = interval => {
@@ -37,13 +38,10 @@ export default class App extends React.Component {
     Gyroscope.setUpdateInterval(interval);
   };
 
-  _requestSlowUpdates = () => this.setUpdateInterval(1000);
-  _requestFastUpdates = () => this._setUpdateInterval(16);
-
-  _subscribe = (prediction, field) => {
+  _subscribe = (workoutName, field) => {
     this.setState({ [field]: true });
     this.data = new Data();
-    this.data.setPrediction(prediction);
+    this.data.setWorkout(workoutName);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
       this.data.addAccelData(data);
       this.setState({ accel: data, count: this.state.count + 1 });
@@ -63,18 +61,17 @@ export default class App extends React.Component {
   };
 
   handleRecordButtonPress = (cancelPressed = false) => {
-    if (this.state.isRecording && !cancelPressed) this.data.save();
+    if (!cancelPressed) dataUtils.save(this.data);
     this._toggleSubscription(this.state.motionType, 'isRecording');
   };
 
   handlePredictButtonPress = () => {
     if (this.state.isPredicting)
-      this.data.saveForPredict(this.onPredictionChange);
+      dataUtils.saveForPredict(this.data, this.onPredictionChange);
     this._toggleSubscription(this.state.motionType, 'isPredicting');
   };
 
   onPredictionChange = result => {
-    console.log('predictionChagne triggered', result);
     this.setState({ prediction: result });
   };
 
