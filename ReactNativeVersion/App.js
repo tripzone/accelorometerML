@@ -37,9 +37,6 @@ export default class App extends React.Component {
     Gyroscope.setUpdateInterval(interval);
   };
 
-  _requestSlowUpdates = () => this.setUpdateInterval(1000);
-  _requestFastUpdates = () => this._setUpdateInterval(16);
-
   _subscribe = (prediction, field) => {
     this.setState({ [field]: true });
     this.data = new Data();

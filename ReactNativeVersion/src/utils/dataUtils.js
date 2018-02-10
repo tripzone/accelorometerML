@@ -19,7 +19,7 @@ export const processData = data => ({
   workoutName: data.workoutName,
 });
 
-export const save = data => data |> processData |> saveToDB;
+export const save = data => saveToDB(processData(data));
 
 export const saveForPredict = (data, onChange) =>
-  data |> processData |> (_ => predictModel(_, onChange));
+  predictModel(processData(data), onChange);

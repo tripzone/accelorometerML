@@ -1,4 +1,4 @@
 {
   "presets": ["babel-preset-expo"],
-  "plugins": ["transform-pipeline", "transform-react-jsx-source"]
+  "plugins": ["transform-react-jsx-source"]
 }
