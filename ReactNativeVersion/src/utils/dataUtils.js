@@ -17,6 +17,7 @@ export const processData = data => ({
     })
     .filter(x => x),
   workoutName: data.workoutName,
+  repCount: data.repCount,
 });
 
 export const save = (data, target) => saveToDB(processData(data), target);

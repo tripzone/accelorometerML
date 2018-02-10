@@ -19,6 +19,7 @@ export default class App extends React.Component {
     accel: {},
     count: 0,
     motionType: 'Motion 1',
+    repCount: '4',
     isRecording: false,
     isPredicting: false,
     prediction: null,
@@ -29,9 +30,9 @@ export default class App extends React.Component {
     this._unsubscribe('isPredicting');
   }
 
-  _toggleSubscription = (workoutName, field) => {
+  _toggleSubscription = field => {
     if (this.state[field]) this._unsubscribe(field);
-    else this._subscribe(workoutName, field);
+    else this._subscribe(field);
   };
 
   _setUpdateInterval = interval => {
@@ -39,10 +40,11 @@ export default class App extends React.Component {
     Gyroscope.setUpdateInterval(interval);
   };
 
-  _subscribe = (workoutName, field) => {
+  _subscribe = field => {
     this.setState({ [field]: true });
     this.data = new Data();
-    this.data.setWorkout(workoutName);
+    this.data.setWorkout(this.state.motionType);
+    this.data.setRepCount(this.state.repCount);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
       this.data.addAccelData(data);
       this.setState({ accel: data, count: this.state.count + 1 });
@@ -63,13 +65,13 @@ export default class App extends React.Component {
 
   handleRecordButtonPress = (cancelPressed = false) => {
     if (!cancelPressed) dataUtils.save(this.data, this.state.target);
-    this._toggleSubscription(this.state.motionType, 'isRecording');
+    this._toggleSubscription('isRecording');
   };
 
   handlePredictButtonPress = () => {
     if (this.state.isPredicting)
       dataUtils.saveForPredict(this.data, this.onPredictionChange);
-    this._toggleSubscription(this.state.motionType, 'isPredicting');
+    this._toggleSubscription('isPredicting');
   };
 
   onPredictionChange = result => {
@@ -77,14 +79,28 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { accel, gyro, count, isRecording, isPredicting } = this.state;
+    const {
+      accel,
+      gyro,
+      count,
+      isRecording,
+      isPredicting,
+      repCount,
+    } = this.state;
 
     return (
       <View style={styles.container}>
-        <Input
-          value={this.state.motionType}
-          onChange={motionType => this.setState({ motionType })}
-        />
+        <View style={styles.inputBoxes}>
+          <Input
+            value={this.state.motionType}
+            onChange={motionType => this.setState({ motionType })}
+          />
+          <Input
+            type={'numeric'}
+            value={repCount}
+            onChange={repCount => this.setState({ repCount })}
+          />
+        </View>
         <Record
           style={styles.button}
           isRecording={isRecording}
@@ -115,5 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     padding: 5,
+  },
+  inputBoxes: {
+    flexDirection: 'row',
   },
 });
