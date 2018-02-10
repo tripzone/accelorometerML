@@ -27,9 +27,9 @@ export default class App extends React.Component {
     this._unsubscribe('isPredicting');
   }
 
-  _toggleSubscription = (prediction, field) => {
+  _toggleSubscription = (workoutName, field) => {
     if (this.state[field]) this._unsubscribe(field);
-    else this._subscribe(prediction, field);
+    else this._subscribe(workoutName, field);
   };
 
   _setUpdateInterval = interval => {
@@ -37,10 +37,10 @@ export default class App extends React.Component {
     Gyroscope.setUpdateInterval(interval);
   };
 
-  _subscribe = (prediction, field) => {
+  _subscribe = (workoutName, field) => {
     this.setState({ [field]: true });
     this.data = new Data();
-    this.data.setPrediction(prediction);
+    this.data.setWorkout(workoutName);
     this.accelerometerSubscription = Accelerometer.addListener(data => {
       this.data.addAccelData(data);
       this.setState({ accel: data, count: this.state.count + 1 });
@@ -59,20 +59,18 @@ export default class App extends React.Component {
     this.setState({ [field]: false });
   };
 
-  handleRecordButtonPress = () => {
-    if (this.state.isRecording) dataUtils.save(this.data);
-
+  handleRecordButtonPress = (cancelPressed = false) => {
+    if (!cancelPressed) dataUtils.save(this.data);
     this._toggleSubscription(this.state.motionType, 'isRecording');
   };
 
   handlePredictButtonPress = () => {
     if (this.state.isPredicting)
-      this.data.saveForPredict(this.onPredictionChange);
+      dataUtils.saveForPredict(this.data, this.onPredictionChange);
     this._toggleSubscription(this.state.motionType, 'isPredicting');
   };
 
   onPredictionChange = result => {
-    console.log('predictionChagne triggered', result);
     this.setState({ prediction: result });
   };
 
@@ -88,7 +86,7 @@ export default class App extends React.Component {
         <Record
           style={styles.button}
           isRecording={isRecording}
-          onPress={() => this.handleRecordButtonPress('isRecording')}
+          onPress={cancelPressed => this.handleRecordButtonPress(cancelPressed)}
         />
         <Predict
           style={styles.button}
@@ -96,8 +94,8 @@ export default class App extends React.Component {
           onPress={() => this.handlePredictButtonPress('isPredicting')}
         />
 
-        <Button title="📖 Train" onPress={trainModel} style={styles.button} />
-        <Button title="💣 Drop DB" onPress={dropDB} style={styles.button} />
+        <Button title="📖 Train" onPress={trainModel} />
+        <Button title="💣 Drop DB" onPress={dropDB} />
         <CurrentMotion accel={accel} gyro={gyro} count={count} />
         <Text>{this.state.prediction}</Text>
       </View>
