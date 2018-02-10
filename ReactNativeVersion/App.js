@@ -61,8 +61,8 @@ export default class App extends React.Component {
     this.setState({ [field]: false });
   };
 
-  handleRecordButtonPress = () => {
-    if (this.state.isRecording) this.data.save();
+  handleRecordButtonPress = (cancelPressed = false) => {
+    if (this.state.isRecording && !cancelPressed) this.data.save();
     this._toggleSubscription(this.state.motionType, 'isRecording');
   };
 
@@ -89,7 +89,7 @@ export default class App extends React.Component {
         <Record
           style={styles.button}
           isRecording={isRecording}
-          onPress={() => this.handleRecordButtonPress('isRecording')}
+          onPress={cancelPressed => this.handleRecordButtonPress(cancelPressed)}
         />
         <Predict
           style={styles.button}
@@ -97,8 +97,8 @@ export default class App extends React.Component {
           onPress={() => this.handlePredictButtonPress('isPredicting')}
         />
 
-        <Button title="📖 Train" onPress={trainModel} style={styles.button} />
-        <Button title="💣 Drop DB" onPress={dropDB} style={styles.button} />
+        <Button title="📖 Train" onPress={trainModel} />
+        <Button title="💣 Drop DB" onPress={dropDB} />
         <CurrentMotion accel={accel} gyro={gyro} count={count} />
         <Text>{this.state.prediction}</Text>
       </View>
