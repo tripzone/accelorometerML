@@ -113,7 +113,7 @@ export default class App extends React.Component {
         />
 
         <Button title="📖 Train" onPress={trainModel} />
-        <Button title="💣 Drop DB" onPress={() => dropDB(this.state.target)} />
+        <Button title="💣 Drop DB" onPress={() => dropDB('test')} />
         <Picker
           target={this.state.target}
           setTarget={target => this.setState({ target })}
