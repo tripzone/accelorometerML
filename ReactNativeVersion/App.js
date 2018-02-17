@@ -46,7 +46,7 @@ export default class App extends React.Component {
     this.accel$.subscribe(data =>
       this.setState({ accel: data, count: this.state.count + 1 })
     );
-    this.accel$.subscribe(data => this.setState({ gyro: data }));
+    this.gyro$.subscribe(data => this.setState({ gyro: data }));
   }
 
   _toggleSubscription = field => {
