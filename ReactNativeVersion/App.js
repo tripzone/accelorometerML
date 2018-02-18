@@ -6,12 +6,13 @@ import { drop as dropDB, trainModel } from './src/utils/db';
 import Button from './src/components/Button';
 import { Data } from './src/models/data';
 import * as dataUtils from './src/utils/dataUtils';
+import { createStreamFromPublisher } from './src/utils/stream';
 import CurrentMotion from './src/components/CurrentMotion';
 import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
 import Predict from './src/components/PredictButton';
 import Picker from './src/components/DataTargetPicker';
-import Rx from 'rxjs';
+import { sendData } from './src/utils/network';
 
 export default class App extends React.Component {
   data = new Data();
@@ -32,21 +33,15 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.gyro$ = Rx.Observable.create(observer => {
-      this.gyroscopeSubscription = Gyroscope.addListener(data =>
-        observer.next(data)
-      );
-    });
-    this.accel$ = Rx.Observable.create(observer => {
-      this.accelerometerSubscription = Accelerometer.addListener(data =>
-        observer.next(data)
-      );
-    });
+    this.gyro$ = createStreamFromPublisher(Gyroscope);
+    this.accel$ = createStreamFromPublisher(Accelerometer);
 
     this.accel$.subscribe(data =>
       this.setState({ accel: data, count: this.state.count + 1 })
     );
     this.gyro$.subscribe(data => this.setState({ gyro: data }));
+    this.accel$.bufferCount(10).subscribe(data => sendData('accel', data));
+    this.gyro$.bufferCount(10).subscribe(data => sendData('gyro', data));
   }
 
   _toggleSubscription = field => {
