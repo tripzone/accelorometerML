@@ -11,6 +11,7 @@ import Input from './src/components/WorkoutInput';
 import Record from './src/components/RecordButton';
 import Predict from './src/components/PredictButton';
 import Picker from './src/components/DataTargetPicker';
+import Rx from 'rxjs';
 
 export default class App extends React.Component {
   data = new Data();
@@ -30,6 +31,24 @@ export default class App extends React.Component {
     this._unsubscribe('isPredicting');
   }
 
+  componentDidMount() {
+    this.gyro$ = Rx.Observable.create(observer => {
+      this.gyroscopeSubscription = Gyroscope.addListener(data =>
+        observer.next(data)
+      );
+    });
+    this.accel$ = Rx.Observable.create(observer => {
+      this.accelerometerSubscription = Accelerometer.addListener(data =>
+        observer.next(data)
+      );
+    });
+
+    this.accel$.subscribe(data =>
+      this.setState({ accel: data, count: this.state.count + 1 })
+    );
+    this.gyro$.subscribe(data => this.setState({ gyro: data }));
+  }
+
   _toggleSubscription = field => {
     if (this.state[field]) this._unsubscribe(field);
     else this._subscribe(field);
@@ -45,14 +64,8 @@ export default class App extends React.Component {
     this.data = new Data();
     this.data.setWorkout(this.state.motionType);
     this.data.setRepCount(this.state.repCount);
-    this.accelerometerSubscription = Accelerometer.addListener(data => {
-      this.data.addAccelData(data);
-      this.setState({ accel: data, count: this.state.count + 1 });
-    });
-    this.gyroscopeSubscription = Gyroscope.addListener(data => {
-      this.data.addGyroData(data);
-      this.setState({ gyro: data });
-    });
+    this.accel$.subscribe(data => this.data.addAccelData(data));
+    this.gyro$.subscribe(data => this.data.addGyroData(data));
   };
 
   _unsubscribe = field => {
